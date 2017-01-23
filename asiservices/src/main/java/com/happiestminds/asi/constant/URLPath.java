@@ -20,5 +20,8 @@ public interface URLPath {
 	String LOGOUT = "/logout";
 	
 	//Dashboard
-	String DASHBOARD = "/requests";
+	String DASHBOARD = "/dashbaord";
+	
+	//Graph
+	String GRAPH = "graphs";
 }

@@ -28,6 +28,10 @@ public class DeclarationFormDTO implements Serializable {
 
 	private String expectedArrivalDateTime;
 
+	private String status;
+
+	private String remarks;
+
 	public Long getId() {
 		return id;
 	}
@@ -84,6 +88,22 @@ public class DeclarationFormDTO implements Serializable {
 		this.expectedArrivalDateTime = expectedArrivalDateTime;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -102,6 +122,8 @@ public class DeclarationFormDTO implements Serializable {
 				+ ((officeId == null) ? 0 : officeId.hashCode());
 		result = prime * result
 				+ ((projectId == null) ? 0 : projectId.hashCode());
+		result = prime * result + ((remarks == null) ? 0 : remarks.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 
@@ -150,6 +172,16 @@ public class DeclarationFormDTO implements Serializable {
 				return false;
 		} else if (!projectId.equals(other.projectId))
 			return false;
+		if (remarks == null) {
+			if (other.remarks != null)
+				return false;
+		} else if (!remarks.equals(other.remarks))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
 		return true;
 	}
 
@@ -159,7 +191,8 @@ public class DeclarationFormDTO implements Serializable {
 				+ contactNumber + ", empId=" + empId + ", projectId="
 				+ projectId + ", officeId=" + officeId + ", leavingDateTime="
 				+ leavingDateTime + ", expectedArrivalDateTime="
-				+ expectedArrivalDateTime + "]";
+				+ expectedArrivalDateTime + ", status=" + status + ", remarks="
+				+ remarks + "]";
 	}
 
 }

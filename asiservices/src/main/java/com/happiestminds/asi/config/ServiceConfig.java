@@ -34,7 +34,7 @@ import com.happiestminds.asi.beans.LoggedInUser;
  * @author shruti.mishra
  */
 @Configuration
-@PropertySource({ "classpath:db.properties"})
+@PropertySource({ "classpath:db.properties", "classpath:rest-application.properties"})
 @ComponentScan(basePackages = { "com.happiestminds.asi.service", "com.happiestminds.asi.dao", "com.happiestminds.asi.repository",
         "com.happiestminds.asi.domain", "com.happiestminds.asi.resource" })
 @EnableTransactionManagement

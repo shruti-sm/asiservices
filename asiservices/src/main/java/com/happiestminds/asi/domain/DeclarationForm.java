@@ -56,6 +56,12 @@ public class DeclarationForm implements Serializable {
 	@Column(name = "expected_arrival_date_time")
 	private Date expectedArrivalDateTime;
 
+	@Column(name = "status")
+	private String status;
+
+	@Column(name = "remarks")
+	private String remarks;
+
 	public Long getId() {
 		return id;
 	}
@@ -112,6 +118,22 @@ public class DeclarationForm implements Serializable {
 		this.expectedArrivalDateTime = expectedArrivalDateTime;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -129,6 +151,8 @@ public class DeclarationForm implements Serializable {
 				+ ((leavingDateTime == null) ? 0 : leavingDateTime.hashCode());
 		result = prime * result + ((office == null) ? 0 : office.hashCode());
 		result = prime * result + ((project == null) ? 0 : project.hashCode());
+		result = prime * result + ((remarks == null) ? 0 : remarks.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 
@@ -177,6 +201,16 @@ public class DeclarationForm implements Serializable {
 				return false;
 		} else if (!project.equals(other.project))
 			return false;
+		if (remarks == null) {
+			if (other.remarks != null)
+				return false;
+		} else if (!remarks.equals(other.remarks))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
 		return true;
 	}
 
@@ -185,7 +219,8 @@ public class DeclarationForm implements Serializable {
 		return "DeclarationForm [id=" + id + ", employee=" + employee
 				+ ", contactNumber=" + contactNumber + ", project=" + project
 				+ ", office=" + office + ", leavingDateTime=" + leavingDateTime
-				+ ", expectedArrivalDateTime=" + expectedArrivalDateTime + "]";
+				+ ", expectedArrivalDateTime=" + expectedArrivalDateTime
+				+ ", status=" + status + ", remarks=" + remarks + "]";
 	}
 
 }

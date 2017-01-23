@@ -19,9 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.happiestminds.asi.beans.LoggedInUser;
+import com.happiestminds.asi.beans.Principal;
 import com.happiestminds.asi.constant.URLPath;
+import com.happiestminds.asi.constant.UserType;
 import com.happiestminds.asi.service.EmployeeService;
 import com.happiestminds.asi.util.JsonUtils;
+import com.happiestminds.asi.util.RestAppProperties;
 
 /**
  * 
@@ -40,25 +43,42 @@ public class LoginResource {
 	private EmployeeService empService;
 
 	@POST
-	@Path(URLPath.LOGIN + "/{userName}")
+	@Path(URLPath.LOGIN + "/{userType}/{userName}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response loginViaUserName(@PathParam("userName") String userName,
+	public Response loginViaUserName(@PathParam("userType") String userType,
+			@PathParam("userName") String userName,
 			String passwordJson) throws JSONException {
 
+		Principal principal = null;
+		
+		String token = UUID.randomUUID().toString();;
 		JSONObject json = new JSONObject(passwordJson);
 		String password = json.getString("password");
-		Long empId = empService.checkLogin(userName, password);
-		if (empId != null) {
-			String token = UUID.randomUUID().toString();
-			loggedInUsers.addLogin(token, empId);
-	
-			displayLoggedInUsers();
+		
+		if(UserType.EMP.equalsIgnoreCase(userType)) {
+			Long empId = empService.checkLogin(userName, password);
+			if(empId != null) {
+				principal = loggedInUsers.addLogin(token, empId, UserType.EMP);
+			}	
+		} else if(UserType.SECURITY.equalsIgnoreCase(userType) && RestAppProperties.INSTANCE.get("SECURITY_USER_NAME").equalsIgnoreCase(userName)
+				 && RestAppProperties.INSTANCE.get("SECURITY_PASSWORD").equalsIgnoreCase(password)) {
 			
+			principal = loggedInUsers.addLogin(token, Long.parseLong(RestAppProperties.INSTANCE.get("SECURITY_ID")), UserType.SECURITY);
+			
+		} else if(UserType.CORP.equalsIgnoreCase(userType) && RestAppProperties.INSTANCE.get("CORP_USER_NAME").equalsIgnoreCase(userName)
+				 && RestAppProperties.INSTANCE.get("CORP_PASSWORD").equalsIgnoreCase(password)) {
+
+			principal = loggedInUsers.addLogin(token, Long.parseLong(RestAppProperties.INSTANCE.get("CORP_ID")), UserType.CORP);
+		}
+		
+		displayLoggedInUsers();
+		
+		if(principal != null) {
 			return Response.ok().entity(JsonUtils.objectToString(token))
 					.build();
 		} else {
-			return Response.status(Response.Status.NOT_FOUND).build();
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 	}
 	
@@ -76,7 +96,7 @@ public class LoginResource {
 	}
 	
 	private void displayLoggedInUsers() {
-		Map<String, Long> login = loggedInUsers.getLoggedInUsers();
+		Map<String, Principal> login = loggedInUsers.getLoggedInUsers();
 		Set<String> keys = login.keySet();
 		for(String key: keys) {
 			System.out.println("token="+key + "empId="+login.get(key));

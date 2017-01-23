@@ -1,16 +1,17 @@
 package com.happiestminds.asi.service;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.happiestminds.asi.domain.DeclarationForm;
 import com.happiestminds.asi.domain.Employee;
 import com.happiestminds.asi.repository.EmployeeRepository;
 import com.happiestminds.asi.util.HashUtils;
+import com.happiestminds.asi.vo.DeclarationFormDTO;
 import com.happiestminds.asi.vo.EmployeeDTO;
 
 /**

@@ -1,6 +1,6 @@
 package com.happiestminds.asi.util;
 
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -33,18 +33,29 @@ public class CommonUtil {
 		}
 	}
 
-	/*public static void main(String[] args) throws Exception {
-		String dateStart = "01/14/2012 23:01:58";
-		String dateStop = "01/14/2012 23:31:48";
+	/*
+	 * public static void main(String[] args) throws Exception { String
+	 * dateStart = "01/14/2012 23:01:58"; String dateStop =
+	 * "01/14/2012 23:31:48";
+	 * 
+	 * // HH converts hour in 24 hours format (0-23), day calculation
+	 * SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+	 * 
+	 * Date d1 = format.parse(dateStart); Date d2 = format.parse(dateStop);
+	 * 
+	 * System.out.println("date="+d1 + ", date2="+d2);
+	 * 
+	 * System.out.println("duration="+ findTimeDuration(d1, d2, MILLISECONDS));
+	 * }
+	 */
 
-		// HH converts hour in 24 hours format (0-23), day calculation
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+	/*public static void main(String[] args) {
+		Calendar cal = Calendar.getInstance();
 
-		Date d1 = format.parse(dateStart);
-		Date d2 = format.parse(dateStop);
-		
-		System.out.println("date="+d1 + ", date2="+d2);
-		
-		System.out.println("duration="+ findTimeDuration(d1, d2, MILLISECONDS));
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		System.out.println("c=" + cal.getTime());
 	}*/
 }
