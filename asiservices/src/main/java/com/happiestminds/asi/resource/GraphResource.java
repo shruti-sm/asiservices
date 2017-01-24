@@ -21,6 +21,7 @@ import com.happiestminds.asi.constant.GraphId;
 import com.happiestminds.asi.constant.URLPath;
 import com.happiestminds.asi.constant.UserType;
 import com.happiestminds.asi.service.DeclarationFormService;
+import com.happiestminds.asi.util.CommonUtil;
 import com.happiestminds.asi.util.JsonUtils;
 
 /**
@@ -65,20 +66,20 @@ public class GraphResource {
 	private Response lastSevenDays() {
 
 		List<GraphEntry> entries = formService.findFormCountsByDuration(
-				startDate(7), endDate(), "leavingDateTime");
+				CommonUtil.makeDate(-7, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999), "leavingDateTime");
 		return generateResponse(entries);
 	}
 
 	private Response lastSevenDaysForProject() {
 
 		List<GraphEntry> entries = formService.findFormCountsByDuration(
-				startDate(7), endDate(), "project.id");
+				CommonUtil.makeDate(-7, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999), "project.id");
 		return generateResponse(entries);
 	}
 
 	private Response lastOneYear() {
 		List<GraphEntry> entries = formService.findFormCountsByDuration(
-				startDate(365), endDate(), "leavingDateTime");
+				CommonUtil.makeDate(-365, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999), "leavingDateTime");
 		return generateResponse(entries);
 	}
 
@@ -90,24 +91,4 @@ public class GraphResource {
 					.build();
 		}
 	}
-
-	private Date startDate(int days) {
-		Calendar startDate = Calendar.getInstance();
-		startDate.add(Calendar.DATE, -days);
-		startDate.set(Calendar.HOUR_OF_DAY, 0);
-		startDate.set(Calendar.MINUTE, 0);
-		startDate.set(Calendar.SECOND, 0);
-		startDate.set(Calendar.MILLISECOND, 0);
-		return startDate.getTime();
-	}
-
-	private Date endDate() {
-		Calendar endDate = Calendar.getInstance();
-		endDate.set(Calendar.HOUR_OF_DAY, 23);
-		endDate.set(Calendar.MINUTE, 59);
-		endDate.set(Calendar.SECOND, 59);
-		endDate.set(Calendar.MILLISECOND, 999);
-		return endDate.getTime();
-	}
-
 }

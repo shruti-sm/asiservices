@@ -32,6 +32,20 @@ public class CommonUtil {
 			return (diff / 1000 % 60);
 		}
 	}
+	
+	
+	public static Date makeDate(Integer days, int hourOfDAY, int minute, int second, int millisecond) {
+		Calendar startDate = Calendar.getInstance();
+		if(days != null) {
+			startDate.add(Calendar.DATE, days);
+		}
+		startDate.set(Calendar.HOUR_OF_DAY, hourOfDAY);
+		startDate.set(Calendar.MINUTE, minute);
+		startDate.set(Calendar.SECOND, second);
+		startDate.set(Calendar.MILLISECOND, millisecond);
+		return startDate.getTime();
+	}
+
 
 	/*
 	 * public static void main(String[] args) throws Exception { String

@@ -51,7 +51,7 @@ public class DashboardResource {
 		Principal principal = loggedInUsers.getLogin(authToken, USER_TYPE);
 		if (principal != null) {
 			
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			return generateResponse(formService.findFormsByDuration(format.parse(startDateString), 
 					format.parse(endDateString), Status.PENDING));
 		} else {

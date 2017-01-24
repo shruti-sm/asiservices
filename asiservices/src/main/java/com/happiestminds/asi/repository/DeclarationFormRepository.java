@@ -1,7 +1,6 @@
 package com.happiestminds.asi.repository;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;

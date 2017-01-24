@@ -1,8 +1,11 @@
 package com.happiestminds.asi.resource;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -11,14 +14,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
+import com.happiestminds.asi.constant.Status;
 import com.happiestminds.asi.constant.URLPath;
 import com.happiestminds.asi.constant.UserType;
 import com.happiestminds.asi.service.DeclarationFormService;
+import com.happiestminds.asi.util.CommonUtil;
+import com.happiestminds.asi.util.JsonUtils;
 import com.happiestminds.asi.vo.DeclarationFormDTO;
 
 /**
@@ -45,12 +52,22 @@ public class DeclrationFormResource {
 		
 		Principal principal = loggedInUsers.getLogin(authToken, USER_TYPE);
 		if(principal != null) {
-			form.setEmpId(principal.getId());
-			Long empId = formService.save(form);
-			if(empId != null) {
-				return Response.ok().entity("success").build();
+			
+			
+			//check if form is already filled in the same day
+			List<DeclarationFormDTO> filledForm = formService.findFormByEmpIdInDuration(principal.getId(), CommonUtil.makeDate(null, 0, 0, 0, 0), 
+					CommonUtil.makeDate(null, 23, 59, 59, 999));
+			
+			if(filledForm == null || filledForm.isEmpty()) {
+				form.setEmpId(principal.getId());
+				Long formId = formService.save(form);
+				if(formId != null) {
+					return Response.ok().entity("success").build();
+				} else {
+					return Response.status(Response.Status.NOT_FOUND).build();
+				}
 			} else {
-				return Response.status(Response.Status.NOT_FOUND).build();
+				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Form filled already").build();
 			}
 		} else {
 			return Response.status(Response.Status.FORBIDDEN).build();
@@ -67,6 +84,28 @@ public class DeclrationFormResource {
 		if (principal != null) {
 			if(formService.updateDeclarationForm(form) != null) {
 				return Response.ok().entity("success").build();
+			} else {
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
+		} else {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
+	}
+	
+	@GET
+	@Path(URLPath.EMP_FORM_TODAY + "/{authToken}/{userName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response dashboardService(@PathParam("authToken") String authToken,
+			@PathParam("userName") String userName)
+			throws JSONException, ParseException {
+
+		Principal principal = loggedInUsers.getLogin(authToken);
+		if (principal != null) {
+			List<DeclarationFormDTO> todayForms = formService.findFormByEmpIdCodeUserNameInDuration(userName, 
+					CommonUtil.makeDate(null, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999));
+			
+			if(todayForms != null && !todayForms.isEmpty()) {
+				return Response.ok().entity(JsonUtils.objectToString(todayForms.get(0))).build();
 			} else {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			}

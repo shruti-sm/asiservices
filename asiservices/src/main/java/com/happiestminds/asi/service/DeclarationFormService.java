@@ -4,8 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 
 import org.dozer.Mapper;
 import org.hibernate.criterion.Criterion;
@@ -57,11 +58,30 @@ public class DeclarationFormService {
 	}
 
 	@Transactional
-	public List<DeclarationFormDTO> findFormsByEmpId(Long id) {
+	public List<DeclarationFormDTO> findFormsByEmpId(Long empId) {
 
-		return mapForms(formRepository.findByCriteria(Restrictions.eq("employee.id", id)));
+		return mapForms(formRepository.findByCriteria(Restrictions.eq("employee.id", empId)));
 	}
 	
+	@Transactional
+	public List<DeclarationFormDTO> findFormByEmpIdInDuration(Long empId, Date startDate, Date endDate) {
+
+		return mapForms(findFormByEmpIdDuration(empId, startDate, endDate));
+	}
+	@Transactional
+	public List<DeclarationFormDTO> findFormByEmpIdCodeUserNameInDuration(Object identifier, Date startDate, Date endDate) {
+
+		Map<String, String> aliases = new HashMap<String, String>();
+		aliases.put("employee", "emp");
+		
+		Criterion crit1 = Restrictions.eq("emp.id", (Long) (identifier));
+		Criterion crit2 = Restrictions.eq("emp.empCode", (String) (identifier));
+		Criterion crit3 = Restrictions.eq("emp.emailId", (String) (identifier));
+		
+		return mapForms(formRepository.findByCriteria(aliases, Restrictions.or(crit1, crit2, crit3), Restrictions.ge("leavingDateTime", startDate), 
+				Restrictions.le("leavingDateTime", endDate)));
+		
+	}
 	/**
 	 * Retrievs current day's records only
 	 * @return
@@ -78,8 +98,10 @@ public class DeclarationFormService {
 	@Transactional
 	public DeclarationFormDTO updateDeclarationForm(DeclarationFormDTO form) throws ParseException {
 		
-		DeclarationForm dForm = formRepository.findOne(form.getId());
-		if(dForm != null) {
+		List<DeclarationForm> dForms = findFormByEmpIdDuration(form.getEmpId(), CommonUtil.makeDate(null, 0, 0, 0, 0), 
+				CommonUtil.makeDate(null, 23, 59, 59, 999));
+		if(dForms != null && !dForms.isEmpty()) {
+			DeclarationForm dForm = dForms.get(0);
 			if(form.getExpectedArrivalDateTime() != null) {
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 				dForm.setExpectedArrivalDateTime(format.parse(form.getExpectedArrivalDateTime()));
@@ -112,8 +134,7 @@ public class DeclarationFormService {
 		
 		DeclarationForm dForm = new DeclarationForm();
 		
-		Employee employee = empRepository.findOne(form.getId());
-		employee.setId(form.getId());
+		Employee employee = empRepository.findOne(form.getEmpId());
 		
 		Project project = projectRepository.findOne(form.getProjectId());
 		Office office = officeRepository.findOne(form.getOfficeId());
@@ -139,11 +160,13 @@ public class DeclarationFormService {
 		return dForm.getId();
 	}
 	
+	@Transactional
 	public List<GraphEntry> findFormCountsByDuration(String groupByField) {
 		return findFormCountsByDuration(null, null, groupByField);
 	}
 	
 	//Graph Services
+	@Transactional
 	public List<GraphEntry> findFormCountsByDuration(Date startDate, Date endDate, String groupByField) {
 		
 		/* .add(Restrictions.ge("leavingDateTime", startDate))
@@ -164,4 +187,11 @@ public class DeclarationFormService {
 		
 		return formRepository.findGroupByColums(criterions, projections);
 	}
+	
+	private List<DeclarationForm> findFormByEmpIdDuration(Long empId, Date startDate, Date endDate) {
+		return formRepository.findByCriteria(Restrictions.eq("employee.id", empId), Restrictions.ge("leavingDateTime", startDate), 
+				Restrictions.le("leavingDateTime", endDate));
+	}
+	
+	
 }
