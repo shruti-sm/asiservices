@@ -1,6 +1,9 @@
 package com.happiestminds.asi.vo;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 
@@ -92,7 +95,11 @@ public class DeclarationFormDTO implements Serializable {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(String status) throws ParseException {
+		
+		/*SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+		Date arrival = format.parse(this.expectedArrivalDateTime);*/
+		
 		this.status = status;
 	}
 

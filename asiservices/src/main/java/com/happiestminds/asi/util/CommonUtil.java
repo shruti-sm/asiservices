@@ -63,13 +63,10 @@ public class CommonUtil {
 	 * }
 	 */
 
-	/*public static void main(String[] args) {
-		Calendar cal = Calendar.getInstance();
-
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		System.out.println("c=" + cal.getTime());
-	}*/
+	public static void main(String[] args) {
+		Object obj = 1484837100000L;
+		Long mil = ((Long)obj).longValue();
+		
+		System.out.println("c=" + mil);
+	}
 }

@@ -4,7 +4,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.hibernate.Criteria;
@@ -14,10 +13,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.happiestminds.asi.beans.GraphEntry;
 import com.happiestminds.asi.domain.DataResult;
+import com.happiestminds.asi.domain.DeclarationForm;
 
 /**
  * 
@@ -261,6 +265,53 @@ public abstract class CommonDAOImpl<T> implements CommonDAO<T> {
         // genres
         return crit.list();
     }
+    
+    @SuppressWarnings({ "unchecked" })
+	public List findByCriteriaWIthAll(List<Criterion> criterions, List<Projection> projections,
+			Map<String, String> aliases, Order order, FetchEntitities fetch,Integer start, Integer max, Class clazz) {
+		
+    	Criteria criteria = getCurrentSession().createCriteria(DeclarationForm.class); 
+    	
+    	if(aliases != null) {
+    		Set<String> keys = aliases.keySet();
+        
+    		for(String key: keys) {
+    			criteria.createAlias(key, aliases.get(key));
+    		}
+    	}
+    	for(Criterion criterion: criterions) {
+    		criteria.add(criterion);
+    	}
+    	
+    	ProjectionList projectionList = Projections.projectionList();
+    	for(Projection projection: projections) {
+    		projectionList.add(projection);
+    	}
+    	criteria.setProjection(projectionList);
+    	
+    	if (order != null) {
+            criteria.addOrder(order);
+        }
+        if (fetch != null) {
+            Map<String, FetchMode> fetchM = fetch.getFetchModeMap();
+            if (fetchM != null) {
+                Set<String> fkeys = fetchM.keySet();
+                for (String k : fkeys) {
+                    criteria.setFetchMode(k, fetchM.get(k));
+                }
+            }
+        }
+        if(start != null) {
+        	criteria.setFirstResult(start);
+        }
+        if(max != null) {
+        	criteria.setMaxResults(max);
+        }
+        
+    	criteria.setResultTransformer(Transformers.aliasToBean(clazz));
+    	
+    	return (List<GraphEntry>) criteria.list();
+	}
 
     @SuppressWarnings("unchecked")
     public Long count() {

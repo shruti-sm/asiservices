@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.dozer.Mapper;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -18,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.happiestminds.asi.beans.GraphEntry;
+import com.happiestminds.asi.beans.ReportEntry;
 import com.happiestminds.asi.constant.Status;
+import com.happiestminds.asi.dao.FetchEntitities;
 import com.happiestminds.asi.domain.DeclarationForm;
 import com.happiestminds.asi.domain.Employee;
 import com.happiestminds.asi.domain.Office;
@@ -69,21 +73,20 @@ public class DeclarationFormService {
 		return mapForms(findFormByEmpIdDuration(empId, startDate, endDate));
 	}
 	@Transactional
-	public List<DeclarationFormDTO> findFormByEmpIdCodeUserNameInDuration(Object identifier, Date startDate, Date endDate) {
+	public List<DeclarationFormDTO> findFormByEmpIdCodeUserNameInDuration(String identifier, Date startDate, Date endDate) {
 
 		Map<String, String> aliases = new HashMap<String, String>();
 		aliases.put("employee", "emp");
 		
-		Criterion crit1 = Restrictions.eq("emp.id", (Long) (identifier));
-		Criterion crit2 = Restrictions.eq("emp.empCode", (String) (identifier));
-		Criterion crit3 = Restrictions.eq("emp.emailId", (String) (identifier));
+		Criterion crit1 = Restrictions.eq("emp.empCode", identifier);
+		Criterion crit2 = Restrictions.eq("emp.emailId", identifier);
 		
-		return mapForms(formRepository.findByCriteria(aliases, Restrictions.or(crit1, crit2, crit3), Restrictions.ge("leavingDateTime", startDate), 
+		return mapForms(formRepository.findByCriteria(aliases, Restrictions.or(crit1, crit2), Restrictions.ge("leavingDateTime", startDate), 
 				Restrictions.le("leavingDateTime", endDate)));
 		
 	}
 	/**
-	 * Retrievs current day's records only
+	 * Retrieves current day's records only
 	 * @return
 	 */
 	@Transactional 
@@ -166,15 +169,9 @@ public class DeclarationFormService {
 	}
 	
 	//Graph Services
+	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<GraphEntry> findFormCountsByDuration(Date startDate, Date endDate, String groupByField) {
-		
-		/* .add(Restrictions.ge("leavingDateTime", startDate))
-		.add(Restrictions.le("leavingDateTime", endDate))      
-        .setProjection(Projections.projectionList()
-                .add(Projections.groupProperty(groupByField))
-                .add(Projections.count(groupByField))         
-        ).setResultTransformer(Transformers.aliasToBean(Entry.class));*/
 		
 		List<Criterion> criterions = new ArrayList<Criterion>();
 		if(startDate != null && endDate != null) {
@@ -182,10 +179,35 @@ public class DeclarationFormService {
 			criterions.add(Restrictions.le("leavingDateTime", endDate));
 		}
 		List<Projection> projections = new ArrayList<Projection>();
-		projections.add(Projections.groupProperty(groupByField).as("key"));
-		projections.add(Projections.count(groupByField).as("value"));
+		projections.add(Projections.alias(Projections.groupProperty(groupByField), "key"));
+		projections.add(Projections.alias(Projections.count(groupByField), "count"));
 		
-		return formRepository.findGroupByColums(criterions, projections);
+		return (List<GraphEntry>) formRepository.findByCriteriaWIthAll(criterions, projections, null, null, null, null, null, GraphEntry.class);
+	}
+	
+	//Reports
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<ReportEntry> findTopLateLeavers(Date startDate, Date endDate, int n) {
+		
+		Map<String, String> aliases = new HashMap<String, String>();
+		aliases.put("employee", "emp");
+		
+		Order order = Order.desc("lateCount");
+		FetchEntitities fetch = new FetchEntitities("employee", FetchMode.JOIN);
+		
+		List<Criterion> criterions = new ArrayList<Criterion>();
+		if(startDate != null && endDate != null) {
+			criterions.add(Restrictions.ge("leavingDateTime", startDate));
+			criterions.add(Restrictions.le("leavingDateTime", endDate));
+		}
+		List<Projection> projections = new ArrayList<Projection>();
+		projections.add(Projections.alias(Projections.groupProperty("emp.id"), "empId"));
+		projections.add(Projections.alias(Projections.property("emp.empCode"), "empCode"));
+		projections.add(Projections.alias(Projections.property("emp.emailId"), "emailId"));
+		projections.add(Projections.alias(Projections.count("emp.id"), "lateCount"));
+		
+		return formRepository.findByCriteriaWIthAll(criterions, projections, aliases, order, fetch, 0, n, ReportEntry.class);
 	}
 	
 	private List<DeclarationForm> findFormByEmpIdDuration(Long empId, Date startDate, Date endDate) {

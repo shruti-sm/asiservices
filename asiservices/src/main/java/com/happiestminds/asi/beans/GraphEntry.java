@@ -1,6 +1,8 @@
 package com.happiestminds.asi.beans;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * 
@@ -13,25 +15,20 @@ public class GraphEntry implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5038700947982045759L;
-	private String key;
-	private Long count;
-
-	public String getKey() {
+	private Object key;
+	private Object count;
+	public Object getKey() {
 		return key;
 	}
-
-	public void setKey(String key) {
+	public void setKey(Object key) {
 		this.key = key;
 	}
-
-	public Long getCount() {
+	public Object getCount() {
 		return count;
 	}
-
-	public void setCount(Long count) {
+	public void setCount(Object count) {
 		this.count = count;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -40,7 +37,6 @@ public class GraphEntry implements Serializable {
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -62,10 +58,12 @@ public class GraphEntry implements Serializable {
 			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
 		return "GraphEntry [key=" + key + ", count=" + count + "]";
 	}
+	
+	
+	
 
 }

@@ -1,8 +1,8 @@
 package com.happiestminds.asi.resource;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -51,10 +51,12 @@ public class GraphResource {
 			if (GraphId.SEVEN_DAYS.equals(grapId)) {
 				return lastSevenDays();
 			} else if (GraphId.PROJECT.equals(grapId)) {
-				return lastSevenDaysForProject();
+				return lastMonthForProject();
 			} else if(GraphId.CURRENT_YEAR.equals(grapId)) {
 				return lastOneYear();
-			} else {
+			}/*  else if(GraphId.CURRENT_YEAR_HOUR.equals(grapId)) {
+				return lastOneYearHourWise();
+			}*/ else {
 				return Response.status(Response.Status.BAD_REQUEST).build();
 			}
 
@@ -70,10 +72,10 @@ public class GraphResource {
 		return generateResponse(entries);
 	}
 
-	private Response lastSevenDaysForProject() {
+	private Response lastMonthForProject() {
 
 		List<GraphEntry> entries = formService.findFormCountsByDuration(
-				CommonUtil.makeDate(-7, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999), "project.id");
+				CommonUtil.makeDate(-30, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999), "project.id");
 		return generateResponse(entries);
 	}
 
@@ -82,8 +84,17 @@ public class GraphResource {
 				CommonUtil.makeDate(-365, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999), "leavingDateTime");
 		return generateResponse(entries);
 	}
+	
+	/*private Response lastOneYearHourWise() {
+		List<GraphEntry> entries = formService.findFormCountsByDuration(
+				CommonUtil.makeDate(-365, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999), "leavingDateTime");
+		
+		Map<>
+		return generateResponse(entries);
+	}*/
 
 	private Response generateResponse(List<GraphEntry> entries) {
+		
 		if (entries == null || entries.isEmpty()) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		} else {
@@ -91,4 +102,10 @@ public class GraphResource {
 					.build();
 		}
 	}
+	
+	/*private Map<String, Long> createHourBucket(List<GraphEntry> entries) {
+		
+		Map<String, Long> map = new HashMap<String, Long>();
+		for
+	}*/
 }

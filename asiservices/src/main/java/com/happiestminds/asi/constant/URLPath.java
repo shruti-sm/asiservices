@@ -9,7 +9,7 @@ package com.happiestminds.asi.constant;
  */
 public interface URLPath {
 
-	//Employee
+	//Declration Forms
 	String EMP = "/emp";
 	String EMP_FORM = EMP + "/form";
 	String EMP_FORM_GET_ALL_FORMS = "/get/all";
@@ -25,4 +25,7 @@ public interface URLPath {
 	
 	//Graph
 	String GRAPH = "graphs";
+	//Reports
+	String REPORT = "reports";
+	String REPORT_EMP = "emp";
 }

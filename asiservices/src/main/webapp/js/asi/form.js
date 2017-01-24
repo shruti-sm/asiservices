@@ -25,17 +25,17 @@ $(document).ready(
 				common.ajax(request);*/
 				
 				var password = JSON.stringify({
-					password : 'hmsecurity'
+					password : 'hmcorp'
 				});
 				
 				var authData = JSON.stringify({
-					dashboardUser : 'hmsecurity',
+					dashboardUser : 'hmcorp',
 					authToken: '64f16c4b-9fcd-45c9-8493-dc9909d2b042'
 				});
 				
 				var request = {
 					type : 'POST',
-					url : '/authenticate/SECURITY/hmsecurity',
+					url : '/authenticate/CORP/hmcorp',
 					data : password,
 					success : function(response){
 						alert(response);
