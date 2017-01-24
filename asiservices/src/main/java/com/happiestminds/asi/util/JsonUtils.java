@@ -151,7 +151,7 @@ public class JsonUtils {
     }
 
     
-    @SuppressWarnings("unchecked")
+  /*  @SuppressWarnings("unchecked")
     public static Class stringToObject(String jsonString, Class clazz) {
         try {
             return new ObjectMapper().readValue(jsonString, clazz);
@@ -162,5 +162,5 @@ public class JsonUtils {
         } catch (IOException e) {
             throw new AsiException("JsonUtils.stringToMap, IOException", e);
         }
-    }
+    }*/
 }

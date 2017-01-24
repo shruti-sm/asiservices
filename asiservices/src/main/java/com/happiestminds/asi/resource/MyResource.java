@@ -1,13 +1,16 @@
-package com.github.elizabetht.resource;
+package com.happiestminds.asi.resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Root resource (exposed at "myresource" path)
  */
+@Component
 @Path("myresource")
 public class MyResource {
 
