@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.happiestminds.asi.beans.AsiMessage;
 import com.happiestminds.asi.beans.GraphEntry;
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
@@ -57,11 +58,11 @@ public class GraphResource {
 			}/*  else if(GraphId.CURRENT_YEAR_HOUR.equals(grapId)) {
 				return lastOneYearHourWise();
 			}*/ else {
-				return Response.status(Response.Status.BAD_REQUEST).build();
+				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("GR1", "Incorrect Graph ID"))).build();
 			}
 
 		} else {
-			return Response.status(Response.Status.FORBIDDEN).build();
+			return Response.ok().entity(new AsiMessage("LOG1", "Not authorized to access the service")).build();
 		}
 	}
 
@@ -94,13 +95,7 @@ public class GraphResource {
 	}*/
 
 	private Response generateResponse(List<GraphEntry> entries) {
-		
-		if (entries == null || entries.isEmpty()) {
-			return Response.status(Response.Status.NOT_FOUND).build();
-		} else {
-			return Response.ok().entity(JsonUtils.objectToString(entries))
-					.build();
-		}
+		return Response.ok().entity(JsonUtils.objectToString(entries)).build();
 	}
 	
 	/*private Map<String, Long> createHourBucket(List<GraphEntry> entries) {

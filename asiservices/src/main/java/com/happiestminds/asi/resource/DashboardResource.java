@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.happiestminds.asi.beans.AsiMessage;
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
 import com.happiestminds.asi.constant.Status;
@@ -55,7 +56,7 @@ public class DashboardResource {
 			return generateResponse(formService.findFormsByDuration(format.parse(startDateString), 
 					format.parse(endDateString)));
 		} else {
-			return Response.status(Response.Status.FORBIDDEN).build();
+			return Response.ok().entity(new AsiMessage("LOG1", "Not authorized to access the service")).build();
 		}
 	}
 	

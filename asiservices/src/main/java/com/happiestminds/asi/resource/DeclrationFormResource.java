@@ -61,15 +61,15 @@ public class DeclrationFormResource {
 				form.setEmpId(principal.getId());
 				Long formId = formService.save(form);
 				if(formId != null) {
-					return Response.ok().entity("success").build();
+					return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF1", "Form submitted successfully"))).build();
 				} else {
-					return Response.ok().entity("error").build();
+					return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF2", "Error in submitting the form"))).build();
 				}
 			} else {
-				return Response.ok().entity("Form filled already").build();
+				return Response.ok().entity(new AsiMessage("DF3", "Form filled today already")).build();
 			}
 		} else {
-			return Response.status(Response.Status.FORBIDDEN).build();
+			return Response.ok().entity(new AsiMessage("LOG1", "Not authorized to access the service")).build();
 		}
 	}
 	
@@ -82,12 +82,12 @@ public class DeclrationFormResource {
 		Principal principal = loggedInUsers.getLogin(authToken);
 		if (principal != null) {
 			if(formService.updateDeclarationForm(form) != null) {
-				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF1", "Form submitted successfully"))).build();
+				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF4", "Form updated successfully"))).build();
 			} else {
-				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF2", "Error in submitting the form"))).build();
+				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF5", "Error in updating the form"))).build();
 			}
 		} else {
-			return Response.status(Response.Status.FORBIDDEN).build();
+			return Response.ok().entity(new AsiMessage("LOG1", "Not authorized to access the service")).build();
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class DeclrationFormResource {
 			
 			return Response.ok().entity(JsonUtils.objectToString(todayForms)).build();
 		} else {
-			return Response.status(Response.Status.FORBIDDEN).build();
+			return Response.ok().entity(new AsiMessage("LOG1", "Not authorized to access the service")).build();
 		}
 	}
 }

@@ -18,6 +18,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.happiestminds.asi.beans.AsiMessage;
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
 import com.happiestminds.asi.constant.URLPath;
@@ -75,10 +76,9 @@ public class LoginResource {
 		displayLoggedInUsers();
 		
 		if(principal != null) {
-			return Response.ok().entity(JsonUtils.objectToString(token))
-					.build();
+			return Response.ok().entity(JsonUtils.objectToString(token)).build();
 		} else {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG2", "Incorrect Username/ passowrd"))).build();
 		}
 	}
 	
@@ -89,9 +89,9 @@ public class LoginResource {
 		
 		if(loggedInUsers.removeLogin(token)) {
 			displayLoggedInUsers();
-			return Response.ok().entity("true").build();
+			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG3", "true"))).build();
 		} else {
-			return Response.ok().entity("false").build();
+			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG4", "false"))).build();
 		}
 	}
 	

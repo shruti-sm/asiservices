@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.happiestminds.asi.beans.AsiMessage;
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
 import com.happiestminds.asi.constant.URLPath;
@@ -47,10 +48,10 @@ public class EmployeeResource {
 			if(emp != null) {
 				return Response.ok().entity(JsonUtils.objectToString(emp)).build();
 			} else {
-				return Response.status(Response.Status.NOT_FOUND).build();
+				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("EMP1", "Employee record not found"))).build();
 			}
 		} else {
-			return Response.status(Response.Status.FORBIDDEN).build();
+			return Response.ok().entity(new AsiMessage("LOG1", "Not authorized to access the service")).build();
 		}
 	}
 }
