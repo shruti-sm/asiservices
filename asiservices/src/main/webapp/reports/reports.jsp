@@ -65,15 +65,30 @@ $( document ).ready(function() {
 <body>
 <form>
 	<h1>
-	Project ASI
+	Project ASI - Analytics
 	</h1>
-	<p>Female Employee late working declaration</p>
-
 	<hr>
-
-	<h3>Reports</h3>
-	<br>
-	<canvas class="reportCanvas" id="myChart"></canvas>
+	<div class="col-md-6">
+		<h3 class="col-md-12">Weekly report</h3>
+		<canvas class="reportCanvas" id="myChart">
+	</div>
+	<div class="col-md-6">
+		<h3 class="col-md-12">Weekly report</h3>
+		<canvas class="reportCanvas" id="myChart">
+	</div>
+	<div class="col-md-6">
+	</div>
+	<div class="col-md-6">
+	</div>
+	<div class="col-md-6">
+	</div>
+	<div class="col-md-6">
+	</div>
+	<div class="col-md-6">
+	</div>
+	<div class="col-md-6">
+	</div>
+	
 	
 </form>
 </body>
