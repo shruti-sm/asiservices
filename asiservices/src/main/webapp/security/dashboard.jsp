@@ -47,8 +47,8 @@ Project ASI
 				<td>9876598765</td>
 				<td>8:00 pm</td>
 				<td>8:30 pm</td>
-				<th><a class="btn btn-primary" href="#">Update</a></th>
-				<th><a class="btn btn-danger" href="#">Close</a></th>
+				<th><a href="#">Update</a></th>
+				<th><a href="#" style="color: #ff0000">Close</a></th>
 			</tr>
 			<tr class="danger">
 				<td>6887</td>
@@ -56,8 +56,8 @@ Project ASI
 				<td>97564387443</td>
 				<td>8:04 pm</td>
 				<td>8:15 pm</td>
-				<th><a class="btn btn-primary" href="#">Update</a></th>
-				<th><a class="btn btn-danger" href="#">Close</a></th>
+				<th><a href="#">Update</a></th>
+				<th><a href="#" style="color: #ff0000">Close</a></th>
 			</tr>
 			<tr>
 				<td>6899</td>
@@ -74,8 +74,8 @@ Project ASI
 				<td>7683461233</td>
 				<td>9:10 pm</td>
 				<td>9:30 pm</td>
-				<th><a class="btn btn-primary" href="#">Update</a></th>
-				<th><a class="btn btn-danger" href="#">Close</a></th>
+				<th><a href="#">Update</a></th>
+				<th><a href="#" style="color: #ff0000">Close</a></th>
 			</tr>
 			<tr>
 				<td>6886</td>
@@ -83,8 +83,8 @@ Project ASI
 				<td>8748488474</td>
 				<td>9:00 pm</td>
 				<td>9:45 pm</td>
-				<th><a class="btn btn-primary" href="#">Update</a></th>
-				<th><a class="btn btn-danger" href="#">Close</a></th>
+				<th><a href="#">Update</a></th>
+				<th><a href="#" style="color: #ff0000">Close</a></th>
 			</tr>
 		</tbody>
 	</table>
@@ -114,7 +114,7 @@ Project ASI
 				<td>9854644583</td>
 				<td>8:00 pm</td>
 				<td>8:30 pm</td>
-				<th><a class="btn btn-default" href="#">Reopen</a></th>
+				<th><a href="#">Reopen</a></th>
 			</tr>
 			<tr>
 				<td>6887</td>
@@ -122,7 +122,7 @@ Project ASI
 				<td>97475443678</td>
 				<td>8:04 pm</td>
 				<td>8:15 pm</td>
-				<th><a class="btn btn-default" href="#">Reopen</a></th>
+				<th><a href="#">Reopen</a></th>
 			</tr>
 		</tbody>
 	</table>
