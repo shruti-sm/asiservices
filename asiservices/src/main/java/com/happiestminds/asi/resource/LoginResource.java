@@ -53,7 +53,7 @@ public class LoginResource {
 
 		Principal principal = null;
 		
-		String token = UUID.randomUUID().toString();;
+		String token = UUID.randomUUID().toString();
 		JSONObject json = new JSONObject(passwordJson);
 		String password = json.getString("password");
 		
@@ -78,7 +78,7 @@ public class LoginResource {
 		if(principal != null) {
 			return Response.ok().entity(JsonUtils.objectToString(token)).build();
 		} else {
-			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG2", "Incorrect Username/ passowrd"))).build();
+			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG2", "Incorrect Username/ password"))).build();
 		}
 	}
 	
