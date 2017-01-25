@@ -9,18 +9,29 @@
 <!--[if lt IE 9]>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
 <![endif]-->
-<script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="js/lib/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="js/lib/bootstrap/css/bootstrap-theme.min.css">
-<link rel="stylesheet" type="text/css" href="css/style.css">
+<script src="../jquery-3.1.1.slim.min.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script type="text/javascript">
+$(function() {
+	$('#loginButton').click(function(event){
+		var pwd = $('#password').val();
+		$.post( "/authenticate", { password: pwd })
+		  .done(function( response ) {
+		     // Get the authToken and store it in a cookie.
+			document.location = 'dashboard.jsp';
+		  });
+	});
+});
+</script>
 </head>
 <body>
-<form action="form.html">
+<form>
 	<h1>
-	Project ASI
+	Project ASI - Dashboard
 	</h1>
-	<p>Female Employee late working declaration</p>
-
 	<hr>
 
 	<div class="form-group">
@@ -33,7 +44,7 @@
 	<input type="password" class="form-control" id="password" placeholder="Password">
 	</div>
 
-	<button type="submit" class="btn btn-primary" onclick="document.location=form.jsp">Login</button>
+	<button type="submit" class="btn btn-primary" id="loginButton">Login</button>
 </form>
 </body>
 </html>
