@@ -1,7 +1,6 @@
 package com.happiestminds.asi.resource;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -18,9 +17,9 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.happiestminds.asi.beans.AsiMessage;
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
-import com.happiestminds.asi.constant.Status;
 import com.happiestminds.asi.constant.URLPath;
 import com.happiestminds.asi.constant.UserType;
 import com.happiestminds.asi.service.DeclarationFormService;
@@ -64,10 +63,10 @@ public class DeclrationFormResource {
 				if(formId != null) {
 					return Response.ok().entity("success").build();
 				} else {
-					return Response.status(Response.Status.NOT_FOUND).build();
+					return Response.ok().entity("error").build();
 				}
 			} else {
-				return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Form filled already").build();
+				return Response.ok().entity("Form filled already").build();
 			}
 		} else {
 			return Response.status(Response.Status.FORBIDDEN).build();
@@ -83,9 +82,9 @@ public class DeclrationFormResource {
 		Principal principal = loggedInUsers.getLogin(authToken);
 		if (principal != null) {
 			if(formService.updateDeclarationForm(form) != null) {
-				return Response.ok().entity("success").build();
+				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF1", "Form submitted successfully"))).build();
 			} else {
-				return Response.status(Response.Status.NOT_FOUND).build();
+				return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("DF2", "Error in submitting the form"))).build();
 			}
 		} else {
 			return Response.status(Response.Status.FORBIDDEN).build();
@@ -104,11 +103,7 @@ public class DeclrationFormResource {
 			List<DeclarationFormDTO> todayForms = formService.findFormByEmpIdCodeUserNameInDuration(userName, 
 					CommonUtil.makeDate(null, 0, 0, 0, 0), CommonUtil.makeDate(null, 23, 59, 59, 999));
 			
-			if(todayForms != null && !todayForms.isEmpty()) {
-				return Response.ok().entity(JsonUtils.objectToString(todayForms.get(0))).build();
-			} else {
-				return Response.status(Response.Status.NOT_FOUND).build();
-			}
+			return Response.ok().entity(JsonUtils.objectToString(todayForms)).build();
 		} else {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
