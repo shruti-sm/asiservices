@@ -90,10 +90,9 @@ public class DeclarationFormService {
 	 * @return
 	 */
 	@Transactional 
-	public List<DeclarationFormDTO> findFormsByDuration(Date startDate, Date endDate, String status) {
+	public List<DeclarationFormDTO> findFormsByDuration(Date startDate, Date endDate) {
 		
-		return mapForms(formRepository.findByCriteria(Restrictions.ge("status", status),
-				Restrictions.ge("leavingDateTime", startDate), 
+		return mapForms(formRepository.findByCriteria(Restrictions.ge("leavingDateTime", startDate), 
 				Restrictions.le("leavingDateTime", endDate)));
 		
 	}

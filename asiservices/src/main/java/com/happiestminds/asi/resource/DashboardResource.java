@@ -53,18 +53,13 @@ public class DashboardResource {
 			
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			return generateResponse(formService.findFormsByDuration(format.parse(startDateString), 
-					format.parse(endDateString), Status.PENDING));
+					format.parse(endDateString)));
 		} else {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 	}
 	
 	private Response generateResponse(List<DeclarationFormDTO> forms) {
-		if (forms == null || forms.isEmpty()) {
-			return Response.status(Response.Status.NOT_FOUND).build();
-		} else {
-			return Response.ok().entity(JsonUtils.objectToString(forms))
-					.build();
-		}
+		return Response.ok().entity(JsonUtils.objectToString(forms)).build();
 	}
 }
