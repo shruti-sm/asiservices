@@ -2,10 +2,9 @@ package com.happiestminds.asi.resource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,15 +14,13 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.happiestminds.asi.beans.AsiMessage;
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
-import com.happiestminds.asi.constant.Status;
+import com.happiestminds.asi.constant.MessageCode;
 import com.happiestminds.asi.constant.URLPath;
 import com.happiestminds.asi.constant.UserType;
 import com.happiestminds.asi.service.DeclarationFormService;
 import com.happiestminds.asi.util.JsonUtils;
-import com.happiestminds.asi.vo.DeclarationFormDTO;
 
 /**
  * 
@@ -31,7 +28,7 @@ import com.happiestminds.asi.vo.DeclarationFormDTO;
  * 
  */
 @Path(URLPath.DASHBOARD)
-public class DashboardResource {
+public class DashboardResource extends BaseResource implements MessageCode {
 
 	private static final String USER_TYPE = UserType.SECURITY;
 
@@ -42,9 +39,9 @@ public class DashboardResource {
 	
 	
 	@GET
-	@Path("/{authToken}/{startDate}/{endDate}")
+	@Path("/{startDate}/{endDate}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response dashboardService(@PathParam("authToken") String authToken,
+	public Response dashboardService(@HeaderParam("authToken") String authToken,
 			@PathParam("startDate") String startDateString,
 			@PathParam("endDate") String endDateString)
 			throws JSONException, ParseException {
@@ -53,14 +50,10 @@ public class DashboardResource {
 		if (principal != null) {
 			
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			return generateResponse(formService.findFormsByDuration(format.parse(startDateString), 
-					format.parse(endDateString)));
+			return response(SUCCESS, null, JsonUtils.objectToString(formService.findFormsByDuration(format.parse(startDateString), 
+					format.parse(endDateString))));
 		} else {
-			return Response.ok().entity(new AsiMessage("LOG1", "Not authorized to access the service")).build();
+			return response(ERROR, UNAUTHORIZED, null);
 		}
-	}
-	
-	private Response generateResponse(List<DeclarationFormDTO> forms) {
-		return Response.ok().entity(JsonUtils.objectToString(forms)).build();
 	}
 }

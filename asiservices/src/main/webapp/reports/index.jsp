@@ -9,28 +9,19 @@
 <!--[if lt IE 9]>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
 <![endif]-->
-<script src="../jquery-3.1.1.slim.min.js"></script>
+<script src="../js/lib/jquery.js"></script>
 <script src="../bootstrap/js/bootstrap.min.js"></script>
+<script src="../js/lib/jquery.cookie.js"></script>
+<script src="../js/asi/common.js"></script>
+<script src="../js/asi/reports/login.js"></script>
 <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="../style.css">
-<script type="text/javascript">
-$(function() {
-	$('#loginButton').click(function(event){
-		var pwd = $('#password').val();
-		$.post( "/authenticate", { password: pwd })
-		  .done(function( response ) {
-		     // Get the authToken and store it in a cookie.
-			document.location = 'dashboard.jsp';
-		  });
-	});
-});
-</script>
 </head>
 <body>
 <form>
 	<h1>
-	Project ASI - Reports
+	Project ASI - Dashboard
 	</h1>
 	<hr>
 
@@ -44,7 +35,7 @@ $(function() {
 	<input type="password" class="form-control" id="password" placeholder="Password">
 	</div>
 
-	<button type="submit" class="btn btn-primary" id="loginButton">Login</button>
+	<button type="button" class="btn btn-primary" id="loginButton">Login</button>
 </form>
 </body>
 </html>

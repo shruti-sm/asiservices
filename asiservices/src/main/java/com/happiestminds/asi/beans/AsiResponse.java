@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author shruti.mishra
  * 
  */
-public class AsiMessage implements Serializable {
+public class AsiResponse implements Serializable {
 
 	/**
 	 * 
@@ -16,13 +16,16 @@ public class AsiMessage implements Serializable {
 
 	private String code;
 	private String msg;
+	private String data;
 
-	public AsiMessage() {
+	public AsiResponse() {
 	}
 
-	public AsiMessage(String code, String msg) {
+	public AsiResponse(String code, String msg, String data) {
+		super();
 		this.code = code;
 		this.msg = msg;
+		this.data = data;
 	}
 
 	public String getCode() {
@@ -41,11 +44,20 @@ public class AsiMessage implements Serializable {
 		this.msg = msg;
 	}
 
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((msg == null) ? 0 : msg.hashCode());
 		return result;
 	}
@@ -58,11 +70,16 @@ public class AsiMessage implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AsiMessage other = (AsiMessage) obj;
+		AsiResponse other = (AsiResponse) obj;
 		if (code == null) {
 			if (other.code != null)
 				return false;
 		} else if (!code.equals(other.code))
+			return false;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!data.equals(other.data))
 			return false;
 		if (msg == null) {
 			if (other.msg != null)
@@ -74,7 +91,8 @@ public class AsiMessage implements Serializable {
 
 	@Override
 	public String toString() {
-		return "AsiMessage [code=" + code + ", msg=" + msg + "]";
+		return "AsiResponse [code=" + code + ", msg=" + msg + ", data=" + data
+				+ "]";
 	}
 
 }

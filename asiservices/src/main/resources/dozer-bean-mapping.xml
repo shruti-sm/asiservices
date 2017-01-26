@@ -13,6 +13,40 @@
 			<b>empId</b>
 		</field>
 		<field>
+			<a>employee.empCode</a>
+			<b>empCode</b>
+		</field>
+		<field>
+			<a>employee.firstName</a>
+			<b>firstName</b>
+		</field>
+		<field>
+			<a>employee.lastName</a>
+			<b>lastName</b>
+		</field>
+		<field>
+			<a>project.id</a>
+			<b>projectId</b>
+		</field>
+		<field>
+			<a>project.name</a>
+			<b>projectName</b>
+		</field>
+		
+		<field>
+			<a>office.id</a>
+			<b>officeId</b>
+		</field>
+		<field>
+			<a>office.name</a>
+			<b>officeName</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>com.happiestminds.asi.domain.Employee</class-a>
+		<class-b>com.happiestminds.asi.vo.EmployeeDTO</class-b>
+		<field>
 			<a>project.id</a>
 			<b>projectId</b>
 		</field>

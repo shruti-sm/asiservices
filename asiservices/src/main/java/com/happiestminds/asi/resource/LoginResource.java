@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,9 +19,10 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.happiestminds.asi.beans.AsiMessage;
+import com.happiestminds.asi.beans.AsiResponse;
 import com.happiestminds.asi.beans.LoggedInUser;
 import com.happiestminds.asi.beans.Principal;
+import com.happiestminds.asi.constant.MessageCode;
 import com.happiestminds.asi.constant.URLPath;
 import com.happiestminds.asi.constant.UserType;
 import com.happiestminds.asi.service.EmployeeService;
@@ -35,7 +37,7 @@ import com.happiestminds.asi.util.RestAppProperties;
 
 @Component
 @Path("")
-public class LoginResource {
+public class LoginResource extends BaseResource implements MessageCode {
 	
 	@Autowired
 	LoggedInUser loggedInUsers;
@@ -76,28 +78,29 @@ public class LoginResource {
 		displayLoggedInUsers();
 		
 		if(principal != null) {
-			return Response.ok().entity(JsonUtils.objectToString(token)).build();
+			return response(SUCCESS, null, token);
 		} else {
-			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG2", "Incorrect Username/ password"))).build();
+			return response(ERROR, LOG_INCORRECT_LOGIN, null);
 		}
 	}
 	
 	@GET
-    @Path(URLPath.LOGOUT + "/{token}")
+    @Path(URLPath.LOGOUT)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response logout(@PathParam("token") String token) {
+    public Response logout(@HeaderParam("authToken") String authToken) {
 		
-		if(loggedInUsers.removeLogin(token)) {
+		if(loggedInUsers.removeLogin(authToken) != null) {
 			displayLoggedInUsers();
-			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG3", "true"))).build();
+			return response(SUCCESS, LOG_OUT_TRUE, null);
 		} else {
-			return Response.ok().entity(JsonUtils.objectToString(new AsiMessage("LOG4", "false"))).build();
+			return response(ERROR, LOG_OUT_FALSE, null);
 		}
 	}
 	
 	private void displayLoggedInUsers() {
 		Map<String, Principal> login = loggedInUsers.getLoggedInUsers();
 		Set<String> keys = login.keySet();
+		System.out.println("Currently logged in users");
 		for(String key: keys) {
 			System.out.println("token="+key + "empId="+login.get(key));
 		}

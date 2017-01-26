@@ -25,13 +25,8 @@ public class LoggedInUser {
 		}
 	}
 	
-	public boolean removeLogin(String authToken) {
-		try{
-			loginMap.remove(authToken);
-			return true;
-		} catch(Exception ex) {
-			return false;
-		}
+	public Principal removeLogin(String authToken) {
+		return loginMap.remove(authToken);	
 	}
 	
 	public Principal getLogin(String authToken) {

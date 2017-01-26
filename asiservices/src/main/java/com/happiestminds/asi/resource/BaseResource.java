@@ -1,6 +1,11 @@
 package com.happiestminds.asi.resource;
 
+import javax.ws.rs.core.Response;
+
 import org.springframework.stereotype.Component;
+
+import com.happiestminds.asi.beans.AsiResponse;
+import com.happiestminds.asi.util.JsonUtils;
 
 /**
  * 
@@ -8,15 +13,9 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class BaseResource {
-
+public class BaseResource {	
 	
-	/*@Autowired
-	private LoggedInUser loggedInUsers;
-	
-	public Response checkLogin(String authToken, String userType) {
-		if(loggedInUsers.getLogin(authToken, UserType.EMP) != null) {
-			
-		}
-	}*/
+	public Response response(String code, String msg, String data) {
+		return Response.ok().entity(JsonUtils.objectToString(new AsiResponse(code, msg, data))).build();
+	}
 }

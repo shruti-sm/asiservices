@@ -53,7 +53,7 @@ public class DeclarationFormService {
 	@Autowired
 	private OfficeRepository officeRepository;
 	@Autowired
-    Mapper mapper;
+    private Mapper mapper;
 	
 	@Transactional
 	public Long save(DeclarationFormDTO form) throws AsiException, ParseException {
