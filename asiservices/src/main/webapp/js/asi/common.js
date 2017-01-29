@@ -3,7 +3,7 @@ var common = (function() {
 	var obj = {};
 	
 	obj.tokenKey = "authToken";
-	obj.webPath = '/asiservices';
+	obj.webPath = '/asi';
 	obj.restservices = '/resources';
 	
 	obj.userTypeEmp = 'emp';
@@ -112,6 +112,7 @@ var common = (function() {
 			token : authToken,
 			userType: userType
 		});
+		alert(token);
 		$.cookie(common.tokenKey, token, {expires : 7, path: '/'});
 		window.location.href = window.location.origin + obj.webPath + redirectPage + common.queryString();
 	};

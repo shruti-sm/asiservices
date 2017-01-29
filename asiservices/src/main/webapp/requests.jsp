@@ -36,7 +36,7 @@
 	<b><span id="leavingDateTime"></span></b><br>
 	Expected time of arrival: <span id="expectedArrivalDateTime"></span>
 	</p>
-	<button type="submit" class="btn btn-primary">Reached</button>&nbsp;
+	<button type="submit" class="btn btn-primary" onClick="">Reached</button>&nbsp;
 	<br>
 </form>
 </body>
